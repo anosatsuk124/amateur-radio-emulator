@@ -1,12 +1,8 @@
 <script lang="ts">
     import Canvas from "./Canvas.svelte";
+    import { freq, amp, message } from "./Morse";
 
     const ws = new WebSocket("ws://127.0.0.1:3000");
-
-    ws.onerror = (e) => {
-        console.log(`failed to connect:${e}`);
-        console.log(e);
-    };
 
     const morse = (freq: number, amp: number) => {
         ws.send(
@@ -38,14 +34,10 @@
     const morseMessage = (ws.onmessage = async (e) => {
         const text = await e.data.text();
         const object = JSON.parse(text);
-        if (object.freq == freq) {
-            message = message + "-";
+        if (object.freq == $freq) {
+            $message += "-";
         }
     });
-
-    $: message = "";
-    $: freq = 20;
-    $: amp = 10;
 </script>
 
 <main>
@@ -53,19 +45,21 @@
     <button on:click={morseDash}>-</button>
     <button on:click={morseDot}>.</button>
     <div>
-        <p>Frequency</p>
-        <input type="number" bind:value={freq} min="0" max="10" />
-        <input type="range" bind:value={freq} min="0" max="10" />
-    </div>
-    <div>
-        <p>Amplitude</p>
-        <input type="number" bind:value={amp} min="0" max="10" />
-        <input type="range" bind:value={amp} min="0" max="10" />
-    </div>
-    <button on:click={() => morse(freq, amp)}> morse </button>
-    <div>
-        <p>{message}</p>
         <Canvas />
+        <div>
+            <div>
+                <p>Frequency</p>
+                <input type="number" bind:value={$freq} min="0" max="10" />
+                <input type="range" bind:value={$freq} min="0" max="10" />
+            </div>
+            <div>
+                <p>Amplitude</p>
+                <input type="number" bind:value={$amp} min="0" max="10" />
+                <input type="range" bind:value={$amp} min="0" max="10" />
+            </div>
+            <button on:click={() => morse($freq, $amp)}> morse </button>
+            <p>{$message}</p>
+        </div>
     </div>
 </main>
 

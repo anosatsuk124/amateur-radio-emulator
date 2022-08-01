@@ -1,1 +1,1 @@
-export const ws = new WebSocket("ws://127.0.0.1:3000");
+export const ws = new WebSocket("wss://amateur-radio-emulator.herokuapp.com");

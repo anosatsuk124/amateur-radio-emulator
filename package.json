@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "ts-node src/index.ts",
     "build": "tsc",
-    "heroku-postbuild": "cd web/ && yarn build && cd ../ && tsc && node dist/index.js"
+    "heroku-postbuild": "yarn install && cd web/ && yarn install && yarn build && cd ../ && tsc && node dist/index.js"
   },
   "dependencies": {
     "dotenv": "^16.0.1",

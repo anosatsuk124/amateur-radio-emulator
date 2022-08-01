@@ -28,7 +28,7 @@
             for (let i = 0; i < width; i += width / 10) {
                 plotScale(`${i}`, 5, width - i * 2);
             }
-            for (let i = height; 0 < i; i -= height / 10) {
+            for (let i = height; i >= 0; i -= height / 10) {
                 plotScale(`${i}`, i * 2, height - 5);
             }
         };

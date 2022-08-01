@@ -1,6 +1,5 @@
 import * as ws from 'ws';
 import * as dotenv from 'dotenv';
-import { Url } from 'url';
 
 dotenv.config();
 

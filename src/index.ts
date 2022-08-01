@@ -1,12 +1,15 @@
 import * as ws from 'ws';
 import * as dotenv from 'dotenv';
-
+import express from 'express';
+import http from 'http';
 dotenv.config();
 
 const PORT = Number(process.env.PORT) || 3000;
 
-const wss = new ws.Server({ port: PORT });
+const app = express();
+const server = http.createServer(app);
 
+const wss = new ws.Server({ server: server });
 const clientsByChannel = new Map;
 
 wss.on('connection', (client, req) => {
@@ -32,3 +35,10 @@ wss.on('connection', (client, req) => {
         client.send(data);
     });
 });
+
+
+app.use('/', express.static(__dirname + '/../web/dist'));
+
+server.listen(PORT, () => {
+    console.log(`listening on http://localhost:${PORT}`)
+})

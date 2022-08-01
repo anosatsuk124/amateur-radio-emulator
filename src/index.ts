@@ -1,8 +1,35 @@
-import * as ws from "ws";
-import express from 'express';
-import * as fs from 'fs';
+import * as ws from 'ws';
+import * as dotenv from 'dotenv';
+import { Url } from 'url';
 
-const app = express();
-const wss = new ws.Server({ port: 8000 });
+dotenv.config();
 
-app.listen(8080);
+const PORT = Number(process.env.PORT) || 3000;
+
+const wss = new ws.Server({ port: PORT });
+
+const clientsByChannel = new Map;
+
+wss.on('connection', (client, req) => {
+    const channel = new URL(req.url as string, `http://${req.headers.host}`).pathname.split('/').slice(-1)[0];
+
+    if (!clientsByChannel.has(channel)) {
+        clientsByChannel.set(channel, new Set);
+    }
+
+    clientsByChannel.get(channel).add(client);
+
+    client.on('message', data => {
+        for (const receiver of (clientsByChannel.get(channel) || [])) {
+            if (receiver == client) continue;
+            try {
+                receiver.send(data);
+            } catch (e) {
+                console.warn(e);
+            }
+        }
+
+        console.log('%s', data);
+        client.send(data);
+    });
+});

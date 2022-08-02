@@ -44,25 +44,54 @@ const drawInitialize = (ctx: CanvasRenderingContext2D, width: number, height: nu
     ctx.stroke();
 }
 
+const drawOnMessage = (
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    timer: number,
+    value: number): number => {
+    const center = height / 2;
+    const point = center - value;
+
+    if (timer + 2 > width) {
+        ctx.translate(timer, 0);
+    }
+
+    console.log(`ws: ${timer}`);
+    ctx.beginPath();
+    ctx.moveTo(timer, center);
+    timer += 1;
+    ctx.lineTo(timer, point);
+    ctx.closePath();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(timer, point);
+    timer += 1;
+    ctx.lineTo(timer, center);
+    ctx.closePath();
+    ctx.stroke();
+
+    return timer;
+
+}
+
 const drawInterval = (
     ctx: CanvasRenderingContext2D,
     width: number,
     height: number,
-    freq: number,
-    amp: number,
-    timer: number,
-    currentPoint: number,
-) => {
-    const drawGraph = () => {
-        ctx.beginPath();
-        ctx.moveTo(timer, height / 2);
-        ctx.lineTo(timer, currentPoint);
-        ctx.closePath();
-        ctx.stroke();
-        // ctx.translate(timer, 0);
-    }
+    timer: number
+): number => {
+    const center = height / 2;
+    console.log(`interval: ${timer}`)
+    ctx.beginPath();
+    ctx.moveTo(timer, center);
+    timer += 1;
+    ctx.lineTo(timer, center);
+    ctx.closePath();
+    ctx.stroke();
 
-    drawGraph();
+    return timer;
 };
 
-export { drawBase, drawInterval, drawInitialize };
+export { drawBase, drawInterval, drawInitialize, drawOnMessage };

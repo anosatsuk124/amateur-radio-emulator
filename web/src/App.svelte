@@ -7,16 +7,12 @@
     let morseButton: HTMLElement;
 
     const morse = (freq: number, amp: number) => {
-        setInterval(
-            () =>
-                ws.send(
-                    JSON.stringify({
-                        freq: freq,
-                        amp: amp,
-                    })
-                ),
-            100
-        );
+        const json = JSON.stringify({
+            freq: freq,
+            amp: amp,
+        });
+        ws.send(json);
+        console.log(json);
     };
 
     onMount(() => {
@@ -27,10 +23,8 @@
             node.addEventListener("mousemove", () => clearInterval(loop));
             morse($freq, $amp);
             const loop = setInterval(() => {
-                // morse($freq, $amp);
-                console.log("hello");
-            }, 100);
-            console.log("finish");
+                morse($freq, $amp);
+            }, 1);
         });
     });
 

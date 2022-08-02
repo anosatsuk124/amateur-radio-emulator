@@ -21,7 +21,7 @@
 
         setInterval(() => {
             $timer = drawInterval(ctx, width, height, $timer);
-        }, 1);
+        }, 100);
 
         ws.onmessage = async (e) => {
             const text = await e.data.text();

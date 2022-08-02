@@ -40,7 +40,7 @@
 
 <main>
     <h1>Amateur Radio Emulator</h1>
-    <div>
+    <div id="morse">
         <Canvas />
         <button bind:this={morseButton}> morse </button>
         <Morse />
@@ -48,4 +48,7 @@
 </main>
 
 <style>
+    #morse {
+        user-select: none;
+    }
 </style>

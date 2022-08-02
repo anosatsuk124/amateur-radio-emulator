@@ -53,10 +53,6 @@ const drawOnMessage = (
     const center = height / 2;
     const point = center - value;
 
-    if (timer + 2 > width) {
-        ctx.translate(timer, 0);
-    }
-
     console.log(`ws: ${timer}`);
     ctx.beginPath();
     ctx.moveTo(timer, center);

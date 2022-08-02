@@ -1,43 +1,42 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { freq, amp } from "./Morse.svelte";
+    import { drawBase, drawInitialize, drawInterval } from "./Graph";
+    import { writable } from "svelte/store";
+    import { ws } from "./Websocket";
+
     let canvas: HTMLCanvasElement;
+    const timer = writable(0);
+    const freq = writable(0);
+    const amp = writable(0);
+    const currentPoint = writable(0);
 
     onMount(() => {
         const ctx = canvas.getContext("2d");
         const width = canvas.width;
         const height = canvas.height;
-        const drawFrame = () => {
-            ctx.beginPath();
-            ctx.moveTo(height, width);
-            ctx.lineTo(0, width);
 
-            ctx.moveTo(0, width);
-            ctx.lineTo(0, 0);
-            ctx.closePath();
-            ctx.stroke();
+        ws.onmessage = async (e) => {
+            const text = await e.data.text();
+            const object = JSON.parse(text);
+            $freq = object.freq;
+            $amp = object.amp;
         };
 
-        const plotScale = (text: string, x: number, y: number) => {
-            ctx.font = "12px serif";
-            ctx.fillStyle = "rgb(0,0,0)";
-            ctx.fillText(text, x, y);
-        };
-
-        const drawScale = () => {
-            for (let i = 0; i < width; i += width / 10) {
-                plotScale(`${i}`, 5, width - i * 2);
-            }
-            for (let i = height; i >= 0; i -= height / 10) {
-                plotScale(`${i}`, i * 2, height - 5);
-            }
-        };
-
-        const drawGraph = () => {};
-
-        drawFrame();
-        drawScale();
-        drawGraph();
+        drawBase(ctx, width, height);
+        // drawInitialize(ctx, width, height);
+        $currentPoint = height / 2;
+        setInterval(() => {
+            $timer += 1;
+            drawInterval(
+                ctx,
+                width,
+                height,
+                $freq,
+                $amp,
+                $timer,
+                $currentPoint
+            );
+        }, 1);
     });
 </script>
 

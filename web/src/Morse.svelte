@@ -1,9 +1,9 @@
 <script lang="ts" context="module">
-    import { writable, derived } from "svelte/store";
+    import { writable } from "svelte/store";
 
     const freq = writable(20);
     const amp = writable(10);
-    let message = writable("");
+    const message = writable("");
 
     export { freq, amp, message };
 </script>

@@ -44,15 +44,18 @@ const drawInitialize = (ctx: CanvasRenderingContext2D, width: number, height: nu
     ctx.stroke();
 }
 
-const drawInterval = (ctx: CanvasRenderingContext2D, width: number, height: number, freq: number, amp: number, timer: number, currentPoint: number) => {
-    const center = height / 2;
-
+const drawInterval = (
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    freq: number,
+    amp: number,
+    timer: number,
+    currentPoint: number,
+) => {
     const drawGraph = () => {
-        console.log(amp);
         ctx.beginPath();
-        currentPoint += amp;
-        ctx.moveTo(timer, currentPoint);
-        currentPoint += amp;
+        ctx.moveTo(timer, height / 2);
         ctx.lineTo(timer, currentPoint);
         ctx.closePath();
         ctx.stroke();

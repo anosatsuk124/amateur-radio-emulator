@@ -18,8 +18,8 @@
     onMount(() => {
         const node = morseButton;
 
-        node.addEventListener("touchstart", () => {
-            node.addEventListener("touchend", () => clearInterval(loop));
+        node.addEventListener("touchstart mousedown", () => {
+            node.addEventListener("touchend mouseup", () => clearInterval(loop));
             morse($freq, $amp);
             const loop = setInterval(() => {
                 morse($freq, $amp);

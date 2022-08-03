@@ -67,7 +67,6 @@ const drawOnMessage = (
     const center = height / 2;
     const point = center - value;
 
-    console.log(`ws: ${timer}`);
     generateBeep(20, 100, 30);
 
     ctx.beginPath();
@@ -121,10 +120,8 @@ const drawStack = (
         ) {
             timer = drawInterval(ctx, width, height, timer);
             timer = drawOnMessage(ctx, width, height, timer, amp);
-            console.log("hello");
         } else {
             timer = drawOnMessage(ctx, width, height, timer, amp);
-            console.log("hello");
         }
 
         beforeTimestamp = timestamp;
@@ -139,7 +136,6 @@ const drawInterval = (
     timer: number
 ): number => {
     const center = height / 2;
-    console.log(`interval: ${timer}`)
     ctx.beginPath();
     ctx.moveTo(timer, center);
     timer += 1;

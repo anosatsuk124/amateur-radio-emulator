@@ -24,8 +24,6 @@
 
         setInterval(() => {
             if (10 < $stack.length) {
-                console.log("nihao");
-
                 drawStack(ctx, width, height, $timer, $stack);
                 $stack = [];
             } else {

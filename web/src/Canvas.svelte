@@ -20,6 +20,11 @@
         drawBase(ctx, width, height);
 
         setInterval(() => {
+            if (width < $timer) {
+                ctx.clearRect(0, 0, width, height);
+                drawBase(ctx, width, height);
+                $timer = 0;
+            }
             $timer = drawInterval(ctx, width, height, $timer);
         }, 1);
 

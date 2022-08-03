@@ -44,22 +44,22 @@ const drawInitialize = (ctx: CanvasRenderingContext2D, width: number, height: nu
     ctx.stroke();
 }
 
-const generateBeep = (vol: number, freq: number, duration: number) => {
-    const a = new AudioContext();
-    const v = a.createOscillator();
-    const u = a.createGain();
+const generateBeep = (ctx: AudioContext, vol: number, freq: number, duration: number) => {
+    const v = ctx.createOscillator();
+    const u = ctx.createGain();
     v.connect(u);
     v.frequency.value = freq;
     v.type = "square";
-    u.connect(a.destination);
+    u.connect(ctx.destination);
     u.gain.value = vol * 0.01;
-    v.start(a.currentTime);
-    v.stop(a.currentTime + duration * 0.001);
+    v.start(ctx.currentTime);
+    v.stop(ctx.currentTime + duration * 0.001);
 };
 
 
 const drawOnMessage = (
     ctx: CanvasRenderingContext2D,
+    audio_ctx: AudioContext,
     width: number,
     height: number,
     timer: number,
@@ -67,7 +67,7 @@ const drawOnMessage = (
     const center = height / 2;
     const point = center - value;
 
-    generateBeep(20, 100, 30);
+    generateBeep(audio_ctx, 20, 100, 30);
 
     ctx.beginPath();
     ctx.moveTo(timer, center);
@@ -103,6 +103,7 @@ interface MorseObject {
 
 const drawStack = (
     ctx: CanvasRenderingContext2D,
+    audio_ctx: AudioContext,
     width: number,
     height: number,
     timer: number,
@@ -119,9 +120,9 @@ const drawStack = (
             50
         ) {
             timer = drawInterval(ctx, width, height, timer);
-            timer = drawOnMessage(ctx, width, height, timer, amp);
+            timer = drawOnMessage(ctx, audio_ctx, width, height, timer, amp);
         } else {
-            timer = drawOnMessage(ctx, width, height, timer, amp);
+            timer = drawOnMessage(ctx, audio_ctx, width, height, timer, amp);
         }
 
         beforeTimestamp = timestamp;

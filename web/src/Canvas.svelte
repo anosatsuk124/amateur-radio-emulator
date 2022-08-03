@@ -14,6 +14,7 @@
     let canvas: HTMLCanvasElement;
     const timer = writable(0);
     const stack = writable([]);
+    const audio_ctx = new AudioContext();
 
     onMount(async () => {
         const ctx = canvas.getContext("2d");
@@ -24,7 +25,7 @@
 
         setInterval(() => {
             if (10 < $stack.length) {
-                drawStack(ctx, width, height, $timer, $stack);
+                drawStack(ctx, audio_ctx, width, height, $timer, $stack);
                 $stack = [];
             } else {
                 $timer = drawInterval(ctx, width, height, $timer);
@@ -48,6 +49,15 @@
 
         // drawInitialize(ctx, width, height);
     });
+
+    const enableSound = () => {
+        const empty = audio_ctx.createBufferSource();
+        empty.start();
+        empty.stop();
+    };
 </script>
 
-<canvas bind:this={canvas} width={600} height={600} />
+<div>
+    <canvas bind:this={canvas} width={600} height={600} />
+    <button on:click={enableSound}> enable the sound emulation </button>
+</div>

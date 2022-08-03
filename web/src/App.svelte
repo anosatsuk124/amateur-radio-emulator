@@ -59,4 +59,8 @@
     #morse {
         user-select: none;
     }
+
+    main {
+        touch-action: manipulation;
+    }
 </style>

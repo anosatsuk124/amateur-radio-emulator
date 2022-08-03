@@ -5,12 +5,15 @@
         drawInitialize,
         drawInterval,
         drawOnMessage,
+        pushToStack,
+        drawStack,
     } from "./Graph";
     import { writable } from "svelte/store";
     import { ws } from "./Websocket";
 
     let canvas: HTMLCanvasElement;
-        const timer = writable(0);
+    const timer = writable(0);
+    const stack = writable([]);
 
     onMount(async () => {
         const ctx = canvas.getContext("2d");
@@ -20,12 +23,19 @@
         drawBase(ctx, width, height);
 
         setInterval(() => {
+            if (10 < $stack.length) {
+                console.log("nihao");
+
+                drawStack(ctx, width, height, $timer, $stack);
+                $stack = [];
+            } else {
+                $timer = drawInterval(ctx, width, height, $timer);
+            }
             if (width < $timer) {
                 ctx.clearRect(0, 0, width, height);
                 drawBase(ctx, width, height);
                 $timer = 0;
             }
-            $timer = drawInterval(ctx, width, height, $timer);
         }, 1);
 
         ws.onmessage = async (e) => {
@@ -34,7 +44,8 @@
             const freq = object.freq;
             const amp = object.amp;
 
-            $timer = drawOnMessage(ctx, width, height, $timer, amp);
+            $stack = pushToStack(object, $stack);
+            //generateBeep(20, 100, 30);
         };
 
         // drawInitialize(ctx, width, height);

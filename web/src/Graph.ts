@@ -44,6 +44,20 @@ const drawInitialize = (ctx: CanvasRenderingContext2D, width: number, height: nu
     ctx.stroke();
 }
 
+const generateBeep = (vol: number, freq: number, duration: number) => {
+    const a = new AudioContext();
+    const v = a.createOscillator();
+    const u = a.createGain();
+    v.connect(u);
+    v.frequency.value = freq;
+    v.type = "square";
+    u.connect(a.destination);
+    u.gain.value = vol * 0.01;
+    v.start(a.currentTime);
+    v.stop(a.currentTime + duration * 0.001);
+};
+
+
 const drawOnMessage = (
     ctx: CanvasRenderingContext2D,
     width: number,
@@ -54,6 +68,8 @@ const drawOnMessage = (
     const point = center - value;
 
     console.log(`ws: ${timer}`);
+    generateBeep(20, 100, 30);
+
     ctx.beginPath();
     ctx.moveTo(timer, center);
     timer += 1;
@@ -71,6 +87,50 @@ const drawOnMessage = (
     return timer;
 
 }
+
+const pushToStack = (
+    object: MorseObject,
+    stack: Array<MorseObject>
+): Array<MorseObject> => {
+    stack.push(object);
+    return stack;
+}
+
+interface MorseObject {
+    freq: number,
+    amp: number,
+    timestamp: string
+}
+
+const drawStack = (
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    timer: number,
+    stack: Array<MorseObject>
+): number => {
+    let beforeTimestamp = new Date(stack.shift().timestamp);
+    for (const object of stack) {
+        const freq = object.freq;
+        const amp = object.amp;
+        const timestamp = new Date(object.timestamp);
+
+        if (
+            timestamp.getTime() - beforeTimestamp.getTime() >
+            50
+        ) {
+            timer = drawInterval(ctx, width, height, timer);
+            timer = drawOnMessage(ctx, width, height, timer, amp);
+            console.log("hello");
+        } else {
+            timer = drawOnMessage(ctx, width, height, timer, amp);
+            console.log("hello");
+        }
+
+        beforeTimestamp = timestamp;
+    }
+    return timer;
+};
 
 const drawInterval = (
     ctx: CanvasRenderingContext2D,
@@ -90,4 +150,4 @@ const drawInterval = (
     return timer;
 };
 
-export { drawBase, drawInterval, drawInitialize, drawOnMessage };
+export { drawBase, drawInterval, drawInitialize, drawOnMessage, pushToStack, drawStack };

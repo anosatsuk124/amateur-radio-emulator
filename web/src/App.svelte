@@ -10,6 +10,7 @@
         const json = JSON.stringify({
             freq: freq,
             amp: amp,
+            timestamp: new Date(),
         });
         ws.send(json);
         console.log(json);

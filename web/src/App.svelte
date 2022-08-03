@@ -25,6 +25,14 @@
                 morse($freq, $amp);
             }, 1);
         });
+
+        node.addEventListener("touchstart", () => {
+            node.addEventListener("touchend", () => clearInterval(loop));
+            morse($freq, $amp);
+            const loop = setInterval(() => {
+                morse($freq, $amp);
+            }, 1);
+        });
     });
 
     /*

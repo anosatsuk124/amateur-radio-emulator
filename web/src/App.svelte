@@ -56,8 +56,4 @@
 </main>
 
 <style>
-    main {
-        user-select: none;
-        touch-action: manipulation;
-    }
 </style>

@@ -57,7 +57,7 @@ const generateBeep = (
     const v = ctx.createOscillator();
     const u = ctx.createGain();
     v.connect(u);
-    v.frequency.value = freq;
+    v.frequency.value = freq * 8;
     v.type = "sine";
     u.connect(ctx.destination);
     u.gain.value = vol * 0.008;

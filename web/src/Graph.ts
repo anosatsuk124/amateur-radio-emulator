@@ -1,6 +1,10 @@
 import { ws } from "./Websocket";
 
-const drawBase = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
+const drawBase = (
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number
+) => {
     const drawFrame = () => {
         ctx.beginPath();
         ctx.moveTo(height, width);
@@ -12,11 +16,7 @@ const drawBase = (ctx: CanvasRenderingContext2D, width: number, height: number) 
         ctx.stroke();
     };
 
-    const plotScale = (
-        text: string,
-        x: number,
-        y: number
-    ) => {
+    const plotScale = (text: string, x: number, y: number) => {
         ctx.font = "12px serif";
         ctx.fillStyle = "rgb(0,0,0)";
         ctx.fillText(text, x, y);
@@ -35,27 +35,35 @@ const drawBase = (ctx: CanvasRenderingContext2D, width: number, height: number) 
     drawScale();
 };
 
-const drawInitialize = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
+const drawInitialize = (
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number
+) => {
     const center = height / 2;
     ctx.beginPath();
     ctx.moveTo(0, center);
     ctx.lineTo(width, center);
     ctx.closePath();
     ctx.stroke();
-}
+};
 
-const generateBeep = (ctx: AudioContext, vol: number, freq: number, duration: number) => {
+const generateBeep = (
+    ctx: AudioContext,
+    vol: number,
+    freq: number,
+    duration: number
+) => {
     const v = ctx.createOscillator();
     const u = ctx.createGain();
     v.connect(u);
     v.frequency.value = freq;
-    v.type = "square";
+    v.type = "sine";
     u.connect(ctx.destination);
-    u.gain.value = vol * 0.01;
+    u.gain.value = vol * 0.001;
     v.start(ctx.currentTime);
     v.stop(ctx.currentTime + duration * 0.001);
 };
-
 
 const drawOnMessage = (
     ctx: CanvasRenderingContext2D,
@@ -63,7 +71,8 @@ const drawOnMessage = (
     width: number,
     height: number,
     timer: number,
-    value: number): number => {
+    value: number
+): number => {
     const center = height / 2;
     const point = center - value;
 
@@ -84,8 +93,7 @@ const drawOnMessage = (
     ctx.stroke();
 
     return timer;
-
-}
+};
 
 const pushToStack = (
     object: MorseObject,
@@ -93,12 +101,12 @@ const pushToStack = (
 ): Array<MorseObject> => {
     stack.push(object);
     return stack;
-}
+};
 
 interface MorseObject {
-    freq: number,
-    amp: number,
-    timestamp: string
+    freq: number;
+    amp: number;
+    timestamp: string;
 }
 
 const drawStack = (
@@ -115,10 +123,7 @@ const drawStack = (
         const amp = object.amp;
         const timestamp = new Date(object.timestamp);
 
-        if (
-            timestamp.getTime() - beforeTimestamp.getTime() >
-            50
-        ) {
+        if (timestamp.getTime() - beforeTimestamp.getTime() > 50) {
             timer = drawInterval(ctx, width, height, timer);
             timer = drawOnMessage(ctx, audio_ctx, width, height, timer, amp);
         } else {
@@ -147,4 +152,11 @@ const drawInterval = (
     return timer;
 };
 
-export { drawBase, drawInterval, drawInitialize, drawOnMessage, pushToStack, drawStack };
+export {
+    drawBase,
+    drawInterval,
+    drawInitialize,
+    drawOnMessage,
+    pushToStack,
+    drawStack,
+};

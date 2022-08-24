@@ -60,7 +60,7 @@ const generateBeep = (
     v.frequency.value = freq * 8;
     v.type = "sine";
     u.connect(ctx.destination);
-    u.gain.value = vol * 0.008;
+    u.gain.value = vol * 0.003;
     v.start(ctx.currentTime);
     v.stop(ctx.currentTime + duration * 0.001);
 };
